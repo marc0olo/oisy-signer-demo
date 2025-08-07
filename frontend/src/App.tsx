@@ -5,7 +5,7 @@ import { Switch } from '@/components/ui/switch';
 import ICPLogo from './assets/icp.svg';
 import USDCLogo from './assets/usdc.svg';
 import OISYLogo from './assets/oisy.svg';
-import { useOisyWallet } from './useOisyWallet';
+import { useOisyWallet } from './hooks/useOisyWallet';
 
 export default function App() {
   const {
@@ -29,14 +29,14 @@ export default function App() {
 
   useEffect(() => {
     if (success) {
-      const timer = setTimeout(() => setSuccess(null), 3000);
+      const timer = setTimeout(() => setSuccess(null), 10000);
       return () => clearTimeout(timer);
     }
   }, [success]);
 
   useEffect(() => {
     if (error) {
-      const timer = setTimeout(() => setError(null), 3000);
+      const timer = setTimeout(() => setError(null), 10000);
       return () => clearTimeout(timer);
     }
   }, [error]);

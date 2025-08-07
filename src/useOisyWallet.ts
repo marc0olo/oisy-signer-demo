@@ -79,9 +79,18 @@ export function useOisyWallet() {
 
   const connect = async () => {
     const accounts = await oisySigner.accounts();
+
+    // notes:
+    //    - IcrcAccount is the recommended way of dealing with accounts as it is standardized and more transparent
+    //      - e.g. there is now way to resolve a Subaccount when dealing with the AccountIdentifier representation
+    //    - ICP ledger is different from ICRC-1 ledgers as it has been introduced before ICRC-1 existed. But the ICP ledger supports all ICRC-1 endpoints.
+    //      - it is possible to easily convert an IcrcAccount (Principal + optional Subaccount) into an AccountIdentifier used by the ICP ledger
+    //      - it is impossible to determine the (optional) Subaccount from an AccountIdentifier
+    //    - the Principal + Subaccount representation of the signer lib currently cannot be directly passed to AccountIdentifier.fromPrincipal (subaccount uses a different type)
+    //    - AccountIdentifier is typically only needed to transfer ICP to/from exchanges and to look up the transfer history of the ICP ledger
     const icrcAccount = decodeIcrcAccount(accounts[0].owner.toString());
     const principal = icrcAccount.owner;
-    const id = AccountIdentifier.fromPrincipal({ principal });
+    const accountIdentifier = AccountIdentifier.fromPrincipal({ principal });
 
     const defaultAgent = await HttpAgent.create({ host: 'https://ic0.app' });
     const signerAgent = await SignerAgent.create({
@@ -93,7 +102,7 @@ export function useOisyWallet() {
     setDefaultAgent(defaultAgent);
     setOisySignerAgent(signerAgent);
     setPrincipal(principal);
-    setAccountIdentifier(id);
+    setAccountIdentifier(accountIdentifier);
     setIsConnected(true);
   };
 

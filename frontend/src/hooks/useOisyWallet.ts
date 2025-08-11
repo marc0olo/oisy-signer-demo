@@ -7,9 +7,8 @@ import { SignerAgent } from '@slide-computer/signer-agent';
 import { PostMessageTransport } from '@slide-computer/signer-web';
 import { AccountIdentifier } from '@dfinity/ledger-icp';
 import { decodeIcrcAccount, mapTokenMetadata } from '@dfinity/ledger-icrc';
-
-const ICP_LEDGER_ID = 'ryjl3-tyaaa-aaaaa-aaaba-cai';
-const CKUSDC_LEDGER_ID = 'xevnm-gaaaa-aaaar-qafnq-cai';
+import { toBaseUnits } from '@/libs/utils';
+import { CKUSDC_LEDGER_ID, ICP_LEDGER_ID } from '@/libs/constants';
 
 export function useOisyWallet() {
   const [isConnected, setIsConnected] = useState(false);
@@ -18,7 +17,9 @@ export function useOisyWallet() {
   const [defaultAgent, setDefaultAgent] = useState<HttpAgent | null>(null);
   const [oisySignerAgent, setOisySignerAgent] = useState<SignerAgent | null>(null);
   const [oisyIcpLedgerAgent, setOisyIcpLedgerAgent] = useState<IcrcLedgerCanister | null>(null);
-  const [oisyCkUsdcLedgerAgent, setOisyCkUsdcLedgerAgent] = useState<IcrcLedgerCanister | null>(null);
+  const [oisyCkUsdcLedgerAgent, setOisyCkUsdcLedgerAgent] = useState<IcrcLedgerCanister | null>(
+    null
+  );
 
   const [icpMetadata, setIcpMetadata] = useState<IcrcTokenMetadata>();
   const [ckUsdcMetadata, setCkUsdcMetadata] = useState<IcrcTokenMetadata>();
@@ -28,10 +29,6 @@ export function useOisyWallet() {
 
   const oisyTransport = new PostMessageTransport({ url: 'https://oisy.com/sign' });
   const oisySigner = new Signer({ transport: oisyTransport });
-
-  const toBaseUnits = (amount: number, decimals: number) => {
-    return BigInt(Math.round(amount * 10 ** decimals));
-  };
 
   useEffect(() => {
     if (oisySignerAgent && !oisyIcpLedgerAgent && !oisyCkUsdcLedgerAgent) {
@@ -46,7 +43,7 @@ export function useOisyWallet() {
       setOisyIcpLedgerAgent(oisyIcpLedgerAgent);
       setOisyCkUsdcLedgerAgent(oisyckUsdcLedgerAgent);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [oisySignerAgent]);
 
   useEffect(() => {
@@ -64,7 +61,9 @@ export function useOisyWallet() {
         });
 
         setIcpMetadata(mapTokenMetadata(await defaultIcpLedgerAgent.metadata({ certified: true })));
-        setCkUsdcMetadata(mapTokenMetadata(await defaultCkUsdcLedgerAgent.metadata({ certified: true })));
+        setCkUsdcMetadata(
+          mapTokenMetadata(await defaultCkUsdcLedgerAgent.metadata({ certified: true }))
+        );
         setIcpBalance(await defaultIcpLedgerAgent.balance({ owner: principal }));
         setCkUsdcBalance(await defaultCkUsdcLedgerAgent.balance({ owner: principal }));
       } catch (e) {
@@ -83,6 +82,7 @@ export function useOisyWallet() {
     // notes:
     //    - IcrcAccount is the recommended way of dealing with accounts as it is standardized and more transparent
     //      - e.g. there is now way to resolve a Subaccount when dealing with the AccountIdentifier representation
+    //      - most applications hide the Subaccount completely in the UI and only display the Principal to their users
     //    - ICP ledger is different from ICRC-1 ledgers as it has been introduced before ICRC-1 existed. But the ICP ledger supports all ICRC-1 endpoints.
     //      - it is possible to easily convert an IcrcAccount (Principal + optional Subaccount) into an AccountIdentifier used by the ICP ledger
     //      - it is impossible to determine the (optional) Subaccount from an AccountIdentifier

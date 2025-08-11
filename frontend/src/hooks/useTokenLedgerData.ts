@@ -1,14 +1,8 @@
 import { useState } from 'react';
 import { Principal } from '@dfinity/principal';
 import { HttpAgent } from '@dfinity/agent';
-import {
-  IcrcLedgerCanister,
-  mapTokenMetadata,
-  type IcrcTokenMetadata,
-} from '@dfinity/ledger-icrc';
-
-const ICP_LEDGER_ID = 'ryjl3-tyaaa-aaaaa-aaaba-cai';
-const CKUSDC_LEDGER_ID = 'xevnm-gaaaa-aaaar-qafnq-cai';
+import { IcrcLedgerCanister, mapTokenMetadata, type IcrcTokenMetadata } from '@dfinity/ledger-icrc';
+import { CKUSDC_LEDGER_ID, ICP_LEDGER_ID } from '@/libs/constants';
 
 export function useTokenLedgerData() {
   const [icpBalance, setIcpBalance] = useState<bigint | null>(null);

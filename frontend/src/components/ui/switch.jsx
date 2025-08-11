@@ -1,11 +1,6 @@
 import * as React from 'react';
 
-interface SwitchProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  checked: boolean;
-  onCheckedChange: (checked: boolean) => void;
-}
-
-export function Switch({ checked, onCheckedChange }: SwitchProps) {
+export function Switch({ checked, onCheckedChange }) {
   return (
     <label className="relative inline-flex cursor-pointer items-center">
       <input

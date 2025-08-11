@@ -121,7 +121,7 @@ export default function App() {
                 <span className="break-all">{principal?.toString()}</span>
                 <button
                   onClick={() => copyToClipboard(principal.toString())}
-                  className="text-muted-foreground transition hover:text-zinc-900 dark:hover:text-white"
+                  className="inline-flex h-7 w-7 items-center justify-center rounded text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
                   title="Copy to clipboard"
                 >
                   <Copy size={14} />
@@ -132,7 +132,7 @@ export default function App() {
                 <span className="break-all">{accountIdentifier?.toHex()}</span>
                 <button
                   onClick={() => copyToClipboard(accountIdentifier.toHex())}
-                  className="text-muted-foreground transition hover:text-zinc-900 dark:hover:text-white"
+                  className="inline-flex h-7 w-7 items-center justify-center rounded text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
                   title="Copy to clipboard"
                 >
                   <Copy size={14} />

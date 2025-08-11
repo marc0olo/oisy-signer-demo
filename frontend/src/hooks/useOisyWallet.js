@@ -131,7 +131,6 @@ export function useOisyWallet() {
       });
 
       return { success: true, message: 'Transfer successful.', blockIndex };
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err) {
       return { success: false, message: err.message || 'Transfer failed.' };
     }

@@ -1,17 +1,16 @@
 import { useState } from 'react';
 import { Principal } from '@dfinity/principal';
-import { HttpAgent } from '@dfinity/agent';
-import { IcrcLedgerCanister, mapTokenMetadata, type IcrcTokenMetadata } from '@dfinity/ledger-icrc';
+import { IcrcLedgerCanister, mapTokenMetadata } from '@dfinity/ledger-icrc';
 import { CKUSDC_LEDGER_ID, ICP_LEDGER_ID } from '@/libs/constants';
 
 export function useTokenLedgerData() {
-  const [icpBalance, setIcpBalance] = useState<bigint | null>(null);
-  const [ckUsdcBalance, setCkUsdcBalance] = useState<bigint | null>(null);
-  const [icpMetadata, setIcpMetadata] = useState<IcrcTokenMetadata>();
-  const [ckUsdcMetadata, setCkUsdcMetadata] = useState<IcrcTokenMetadata>();
+  const [icpBalance, setIcpBalance] = useState(null);
+  const [ckUsdcBalance, setCkUsdcBalance] = useState(null);
+  const [icpMetadata, setIcpMetadata] = useState();
+  const [ckUsdcMetadata, setCkUsdcMetadata] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
-  const load = async (principal: Principal, agent: HttpAgent) => {
+  const load = async (principal, agent) => {
     setIsLoading(true);
     const icpLedgerAgent = IcrcLedgerCanister.create({
       agent,

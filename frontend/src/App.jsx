@@ -26,8 +26,8 @@ export default function App() {
   } = useOisyWallet();
 
   const [darkMode, setDarkMode] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<React.ReactNode | null>(null);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   useEffect(() => {
     if (success) {
@@ -43,14 +43,14 @@ export default function App() {
     }
   }, [error]);
 
-  const copyToClipboard = (text: string) => {
+  const copyToClipboard = (text) => {
     navigator.clipboard
       .writeText(text)
       .then(() => setSuccess('Copied to clipboard'))
       .catch(() => setError('Failed to copy'));
   };
 
-  const handleTransfer = async (token: 'ICP' | 'ckUSDC') => {
+  const handleTransfer = async (token) => {
     const result = token === 'ICP' ? await transferIcp() : await transferCkUsdc();
 
     if (result.success && result.blockIndex !== undefined) {
@@ -120,8 +120,8 @@ export default function App() {
                 <span className="whitespace-nowrap font-semibold">Principal:</span>
                 <span className="break-all">{principal?.toString()}</span>
                 <button
-                  onClick={() => copyToClipboard(principal!.toString())}
-                  className="text-muted-foreground transition hover:text-zinc-900 dark:hover:text-white"
+                  onClick={() => copyToClipboard(principal.toString())}
+                  className="inline-flex h-7 w-7 items-center justify-center rounded text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
                   title="Copy to clipboard"
                 >
                   <Copy size={14} />
@@ -131,8 +131,8 @@ export default function App() {
                 <span className="whitespace-nowrap font-semibold">AccountIdentifier:</span>
                 <span className="break-all">{accountIdentifier?.toHex()}</span>
                 <button
-                  onClick={() => copyToClipboard(accountIdentifier!.toHex())}
-                  className="text-muted-foreground transition hover:text-zinc-900 dark:hover:text-white"
+                  onClick={() => copyToClipboard(accountIdentifier.toHex())}
+                  className="inline-flex h-7 w-7 items-center justify-center rounded text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
                   title="Copy to clipboard"
                 >
                   <Copy size={14} />

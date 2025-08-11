@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { IcrcLedgerCanister, type IcrcTokenMetadata } from '@dfinity/ledger-icrc';
+import { IcrcLedgerCanister } from '@dfinity/ledger-icrc';
 import { HttpAgent } from '@dfinity/agent';
 import { Principal } from '@dfinity/principal';
 import { Signer } from '@slide-computer/signer';
@@ -12,19 +12,17 @@ import { CKUSDC_LEDGER_ID, ICP_LEDGER_ID } from '@/libs/constants';
 
 export function useOisyWallet() {
   const [isConnected, setIsConnected] = useState(false);
-  const [principal, setPrincipal] = useState<Principal | null>(null);
-  const [accountIdentifier, setAccountIdentifier] = useState<AccountIdentifier | null>(null);
-  const [defaultAgent, setDefaultAgent] = useState<HttpAgent | null>(null);
-  const [oisySignerAgent, setOisySignerAgent] = useState<SignerAgent | null>(null);
-  const [oisyIcpLedgerAgent, setOisyIcpLedgerAgent] = useState<IcrcLedgerCanister | null>(null);
-  const [oisyCkUsdcLedgerAgent, setOisyCkUsdcLedgerAgent] = useState<IcrcLedgerCanister | null>(
-    null
-  );
+  const [principal, setPrincipal] = useState(null);
+  const [accountIdentifier, setAccountIdentifier] = useState(null);
+  const [defaultAgent, setDefaultAgent] = useState(null);
+  const [oisySignerAgent, setOisySignerAgent] = useState(null);
+  const [oisyIcpLedgerAgent, setOisyIcpLedgerAgent] = useState(null);
+  const [oisyCkUsdcLedgerAgent, setOisyCkUsdcLedgerAgent] = useState(null);
 
-  const [icpMetadata, setIcpMetadata] = useState<IcrcTokenMetadata>();
-  const [ckUsdcMetadata, setCkUsdcMetadata] = useState<IcrcTokenMetadata>();
-  const [icpBalance, setIcpBalance] = useState<bigint | null>(null);
-  const [ckUsdcBalance, setCkUsdcBalance] = useState<bigint | null>(null);
+  const [icpMetadata, setIcpMetadata] = useState();
+  const [ckUsdcMetadata, setCkUsdcMetadata] = useState();
+  const [icpBalance, setIcpBalance] = useState(null);
+  const [ckUsdcBalance, setCkUsdcBalance] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const oisyTransport = new PostMessageTransport({ url: 'https://oisy.com/sign' });
@@ -121,10 +119,7 @@ export function useOisyWallet() {
     setIsLoading(false);
   };
 
-  const transfer = async (
-    ledger: IcrcLedgerCanister | null,
-    metadata?: IcrcTokenMetadata
-  ): Promise<{ success: boolean; message: string; blockIndex?: bigint }> => {
+  const transfer = async (ledger, metadata) => {
     if (!ledger || !principal || !metadata) {
       return { success: false, message: 'Missing transfer prerequisites.' };
     }
@@ -136,8 +131,7 @@ export function useOisyWallet() {
       });
 
       return { success: true, message: 'Transfer successful.', blockIndex };
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
+    } catch (err) {
       return { success: false, message: err.message || 'Transfer failed.' };
     }
   };
